@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  include navigator.jade
+
+  header.masthead(style="background-image: url('images/post-bg.jpg')")
+    div.container.position-relative.px-4.px-lg-5
+      div.row.gx-4.gx-lg-5.justify-content-center
+        div.col-md-10.col-lg-8.col-xl-7
+          div.site-heading
+            h1 Labook
+            span#subheading 清大研究所畢業論文與畢業時長統計
+  main.mb-4
+    div.container.px-4.px-lg-5
+      div.row.gx-4.gx-lg-5.justify-content-center
+        div.col-md-10.col-lg-8.col-xl-7
+          for de in departments
+            h2= de
+            for ps in professors
+              - if(ps.departments.includes(de))
+                a(href="/p/#{ps.name}")= ps.name
+                span= "    "    
+            br
+            br
+    
+  

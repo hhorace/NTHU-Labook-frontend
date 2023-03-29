@@ -1,0 +1,85 @@
+script(src="https://cdn.jsdelivr.net/npm/chart.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.js")
+script(src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js")
+
+div#chart-container
+    canvas#chart
+    script
+        const data = !{JSON.stringify(data)};
+        //- console.log(data);
+        const chart = new Chart(document.getElementById('chart'), {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: '碩',
+                        data: data.master,
+                        borderColor: 'blue',
+                        yAxisID: 'y1',
+                    },
+                    {
+                        label: '博',
+                        data: data.PHD,
+                        borderColor: 'red',
+                        yAxisID: 'y2',
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(context) {
+                                //- console.log(context[0]);
+                                return context[0].raw.x;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'year',
+                            minUnit: 'day'
+                        },
+                        title: {
+                            display: true,
+                            text: '口試日期',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    y1: {
+                        title: {
+                            display: true,
+                            text: '畢業時長(年)',
+                            font: {
+                                size: 14
+                            }
+                        },
+                        min: 0,
+                        max: 10.0,
+                    },
+                    y2: {
+                        display: false,
+                        min: 0,
+                        max: 10.0,
+                    }
+                }
+            }
+        });
+        
+        //- function resize() {
+        //-     //- console.log("height: ", window.innerHeight, "px");
+        //-     //- console.log("width: ", window.innerWidth, "px");
+        //-     let chart = Chart.getChart('chart');
+        //-     if(window.innerWidth>1090)
+        //-         chart.config._config.options.maintainAspectRatio = false;
+        //-     else 
+        //-         chart.config._config.options.maintainAspectRatio = true;
+            
+        //- }
+        //- window.onresize = resize;

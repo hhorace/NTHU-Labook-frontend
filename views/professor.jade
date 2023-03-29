@@ -1,0 +1,118 @@
+extends layout
+
+block content
+  include navigator.jade
+    
+  header.masthead(style="background-image: url('../images/post-bg.jpg')")
+    div.container.position-relative.px-4.px-lg-5
+      div.row.gx-4.gx-lg-5.justify-content-center
+        div.col-md-10.col-lg-8.col-xl-7
+          div.site-heading
+            h1 Labook
+            span#subheading 清大研究所畢業論文與畢業時長統計
+
+    
+  - PHD_period_avg = (PHD_period_arr.reduce((a, b) => a + b, 0) / PHD_period_arr.length).toFixed(2);
+  - master_period_avg = (master_period_arr.reduce((a, b) => a + b, 0) / master_period_arr.length).toFixed(2);
+  - if(PHD_period_arr.length==0)
+    h1#professor= `${title}（碩: ${master_period_avg} years）`
+  - else if(master_period_arr.length==0)
+    h1#professor= `${title}（博: ${PHD_period_avg} years）`
+  - else
+    h1#professor= `${title}（博: ${PHD_period_avg} years、碩: ${master_period_avg} years）`
+  
+  include chartBlock.jade
+  
+  include cloudBlock.jade
+
+  script
+    function showmorefucn(id) {
+      var dots = document.getElementById("dots"+id);
+      var moreText = document.getElementById("more"+id);
+      var btnText = document.getElementById("btn"+id);
+
+      if (dots.style.display === "none") {
+        dots.style.display = "inline";
+        btnText.innerHTML = "more"; 
+        moreText.style.display = "none";
+      } else {
+        dots.style.display = "none";
+        btnText.innerHTML = " less"; 
+        moreText.style.display = "inline";
+      }
+    }
+
+  table.table.table-striped.table-bordered.table-responsive
+    tbody
+      tr
+        th(rowspan='2') 畢業學年度
+        th 論文標題
+        th(rowspan='2') 連結
+        th(rowspan='2') 學位
+        th(rowspan='2') 畢業時長(years)
+      tr
+        th 關鍵字
+      
+      //- tr
+      //-   th
+      - var id = 0;
+      - for student in result
+        tr
+          td(rowspan='2')= student['graduate_year']
+          td#title
+            div#smallscreen
+              - var part_text = student['title_c'].slice(0, 5);
+              - var remain_text = student['title_c'].slice(5, student['title_c'].length) + ` (${student['title_e']})`;
+              div= part_text
+                span(id="dots#{id}") ... 
+                span(id="more#{id}", style="display:none")= remain_text
+                button.showmore(onclick="showmorefucn(#{id})", id="btn#{id}") more
+              
+              - id += 1
+            div#bigscreen
+              - var whole_text = student['title_c'] +  ` (${student['title_e']})`;
+              div= whole_text
+
+
+          td(rowspan='2')
+            a(href=student['link_nthu'])= 'NTHU'
+            br
+            - if(student['link_tw']!='not found')
+              a(href=student['link_tw'])= 'NDLTD'
+          td(rowspan='2')= student['note']
+          td(rowspan='2')
+            - if(student['date'] == 'not found')
+              span 無口試日期
+            - else 
+              span= student['period']
+        tr
+          td#keyword
+            - keyword_arr_c = student['keyword_c'].split('、')
+            - keyword_arr_e = student['keyword_e'].split('、')
+            - var whole_keyword
+            - if (student['keyword_e']=='not found' && student['keyword_c']=='not found')
+              - whole_keyword = 'keyword not found';
+            - else if (student['keyword_e']=='not found')
+              - whole_keyword = keyword_arr_c.join('、');
+            - else if (student['keyword_c']=='not found')
+              - whole_keyword = keyword_arr_e.join('、');
+            - else
+              - whole_keyword = keyword_arr_c.map((item, index) => { return `${item}(${keyword_arr_e[index]})`; }).join('、');
+
+            div#bigscreen= whole_keyword
+
+            dvi#smallscreen
+              - var part_text = whole_keyword.slice(0, 5);
+              - var remain_text = whole_keyword.slice(5, whole_keyword.length);
+              div= part_text
+                span(id="dots#{id}") ... 
+                span(id="more#{id}", style="display:none")= remain_text
+                button.showmore(onclick="showmorefucn(#{id})", id="btn#{id}") more
+              - id += 1
+
+        //- tr 
+        //-   th
+      
+    
+
+  

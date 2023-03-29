@@ -1,0 +1,22 @@
+{
+  "name": "graduate",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "app": "node app.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^8.1.0",
+    "chart.js": "^4.2.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^4.18.2",
+    "http-errors": "~1.6.3",
+    "jade": "^0.29.0",
+    "js-yaml": "^4.1.0",
+    "markdown-js": "^0.0.3",
+    "morgan": "~1.9.1",
+    "sqlite3": "^5.1.4"
+  }
+}
