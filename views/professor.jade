@@ -20,10 +20,14 @@ block content
     h1#professor= `${title}（博: ${PHD_period_avg} years）`
   - else
     h1#professor= `${title}（博: ${PHD_period_avg} years、碩: ${master_period_avg} years）`
-  
+
   include chartBlock.jade
   
   include cloudBlock.jade
+
+  p(style="margin: auto; text-align: center;")
+    a(href=`https://www.grb.gov.tw/search;keyword=${title};type=GRB05`) 政府計畫（GRB）
+    | ，建議「依年度遞減排序」，以查看最新的研究方向。
 
   script
     function showmorefucn(id) {
